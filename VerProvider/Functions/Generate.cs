@@ -46,7 +46,32 @@ namespace VerProvider.Functions
                     var client = new ServiceBusClient(Environment.GetEnvironmentVariable("ServiceBus"));
                     var sender = client.CreateSender("email_request");
 
-                    var message = new ServiceBusMessage(JsonConvert.SerializeObject(ir))
+
+                    var emailRequest = new EmailRequest()
+                    {
+                        To = ir.Email,
+                        Subject = $"Verification Code {code}",
+                        HtmlBody = $@"
+                        <!DOCTYPE html>
+                        <html lang='en'>
+                        <head>
+                            <meta charset='UTF-8'>
+                            <title>Verification Code</title>
+                        </head>
+                        <body>
+                            <div style='font-family: Arial, sans-serif; color: #333;'>
+                                <h2>Verification Code</h2>
+                                <p>Dear User,</p>
+                                <p>Your verification code is: <strong style='font-size: 24px;'>{code}</strong></p>
+                                <p>If you did not request this code, please ignore this email or contact support.</p>
+                                <p>Best Regards,<br>Manero</p>
+                            </div>
+                        </body>
+                        </html>",
+                        PlainText = $"Please verify your account using this verification code: {code}. If you did not request this code, please ignore this email or contact support."
+                    };
+
+                    var message = new ServiceBusMessage(JsonConvert.SerializeObject(emailRequest))
                     {
                         ContentType = "application/json"
                     };
