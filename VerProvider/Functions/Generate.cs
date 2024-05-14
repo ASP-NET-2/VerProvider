@@ -32,7 +32,7 @@ namespace VerProvider.Functions
                 if (ir != null)
                 {
                     var rnd = new Random();
-                    var code = rnd.Next(100000, 999999);
+                    var code = rnd.Next(10000, 99999);
 
                     var entity = new incomingRequests
                     {
